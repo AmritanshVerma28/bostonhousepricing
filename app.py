@@ -60,6 +60,27 @@ def predict_api():
     print("predict_api called end")
     return op_j
 
+@app.route("/predict",methods=['POST'])
+def predict():
+    print("t1")
+    data = [float(x) for x in request.form.values()]
+    print("t2")
+    data_ = np.array(data).reshape(1,-1)
+    print(data_)
+    print("t3")
+    new_data = scaler.transform(data_)
+    op = regmodel.predict(new_data)[0]
+  #  op_j =  jsonify(op[0])
+   # print(op_j)
+    print("predict called end")
+    home_new = render_template("home.html",prediction_text="Price is "+str(op))
+
+
+
+    return home_new
 
 if __name__ =="__main__":
     app.run(debug=True)
+
+#kill -9 $(lsof -t -i:5000)
+#https://stackoverflow.com/questions/11583562/how-to-kill-a-process-running-on-particular-port-in-linux
